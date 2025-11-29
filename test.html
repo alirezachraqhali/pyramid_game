@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Test on matrix</title>
+    <style>
+        .row {
+            text-align: center;
+        }
+        button {
+            margin: 3px;
+            font-size: 1.5em;
+            width: 35px;
+            height: 35px;
+        }
+        button.hide {
+            visibility: hidden;
+        }
+        button.lock {
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        const cell = document.createElement('div')
+        for (i=1;i<=7;i++){
+            const row = document.createElement('div')
+            row.className = 'row'
+            for (j=1;j<=i;j++){
+                const btn = document.createElement('button')
+                btn.textContent = '+';
+                //btn.classList.add('lock')
+                btn.onclick = ()=>{
+                    if (!btn.classList.contains('lock')){
+                        btn.classList.add('hide')
+                        checkFreezes()
+                    }
+                }
+                row.appendChild(btn)
+            }
+            cell.appendChild(row)
+        }
+        document.body.appendChild(cell)
+
+        function checkFreezes(){
+            const rows = cell.querySelectorAll('.row')
+            for (i=0;i<rows.length;i++){
+                const r1 = rows[i]
+                const r2 = rows[i+1]
+                if (r1 && r2) {
+                    const ir1 = r1.querySelectorAll('button')
+                    const ir2 = r2.querySelectorAll('button')
+                    //console.log(ir1, ir2)
+                    ir1.forEach((ii, n)=> {
+                        const ij = ir2[n]
+                        const ij2 = ir2[n+1]
+                        const is_bottom_hided = ij && ij.classList.contains('hide')
+                        const is_bottom_right_hided = ij2 && ij2.classList.contains('hide')
+                        if (is_bottom_hided && is_bottom_right_hided){
+                            ii.classList.remove('lock')
+                        } else {
+                            ii.classList.add('lock')
+                        }
+                    })
+                }
+            }
+        }
+        checkFreezes()
+    </script>
+
+    <div class="cards">
+        <div class="card"></div>
+        <div class="card"></div>
+        <div class="card"></div>
+    </div>
+    <div class="cards"></div>
+
+    <style>
+        .cards {
+            width: 50px;
+            height: 50px;
+            border: 3px black solid;
+        }
+        .cards:has(.card){
+            background: red;
+        }
+    </style>
+
+    <a href="">Href void</a>
+</body>
+</html>
