@@ -45,12 +45,6 @@ body {
     color: black;
     cursor: default;
 }
-#main-menu li a:focus {
-    background: silver;
-}
- #main-menu ul li a:focus {
-    background: transparent;
- }
 #main-menu ul {
     padding: 5px 0;
     display: flex;
@@ -64,6 +58,16 @@ body {
     visibility: hidden;
     opacity: 0;
     transition: 100ms;
+}
+#main-menu ul li {
+    padding: 3px 12px;
+    transition: 120ms ease-in-out;
+}
+#main-menu li a:focus {
+    background: silver;
+}
+#main-menu ul li a:focus {
+    background: transparent;
 }
 #main-menu a:focus ~ ul {
     opacity: 1;
@@ -240,7 +244,6 @@ body {
         margin-top: -23px;
         transform: scale(0.82);
     }
-
     #navbar {
         transform: scale(0.82);
     }

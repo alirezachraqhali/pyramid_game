@@ -9,7 +9,7 @@ let enable_next_card = false
 let cards_length = 0
 function reloadGame(){
     if (confirm('آیا میخواهید از اول بازی کنید ؟'))
-        location.reload()
+        start_game()
 }
 function addEventForCardsUnlock(){
     cards_freeze = document.querySelectorAll('.card:not(.lock)')
@@ -78,7 +78,7 @@ function removeCardIfCardsParent(card){
     }
 }
 function reactStatusGame(){
-    if (game_cell.querySelectorAll('.row .card:not(.lock)').length == 0){
+    if (game_cell.querySelectorAll('.row .card:not(.lock):not(.hide)').length == 0){
         alert('شما برنده شدید !')
         reloadGame()
     } else {
@@ -156,6 +156,7 @@ function start_game() {
     // شافل کردن کارت‌ها
     let shuffledDeck = shuffle(deck)
     let j = 0, k = 0
+    game_cell.innerHTML = ''
     for (i=1;i<=7;i++){
         const row = document.createElement('div')
         row.className = 'row'
@@ -196,8 +197,7 @@ function setHideCard(card) {
 function next_card(){
     deselectCards()
     cards_length = cards.children.length
-    if (cards_length > 0){
-        
+    if (cards_length > 0){  
         card_next.appendChild(cards.lastChild)
         enable_next_card = false
     }
@@ -206,7 +206,6 @@ function next_card(){
             //cards.classList.add('empty')
             enable_next_card = true
         }
-
         if (cards_length == 0){
             const firstIndex = card_next.children.length -1
             for (i = firstIndex; i >= 0; i--){
@@ -218,6 +217,5 @@ function next_card(){
         }
     }
 }
-
 start_game()
 addEventForCardsUnlock()
