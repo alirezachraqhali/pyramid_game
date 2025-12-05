@@ -8,7 +8,10 @@ let limit_next_card = 0
 let enable_next_card = false
 let cards_length = 0
 function reloadGame(){
-    if (confirm('آیا میخواهید از اول بازی کنید ؟'))
+    if (game_cell.querySelectorAll('.row').length > 0){
+        if (confirm('آیا میخواهید از اول بازی کنید ؟'))
+            start_game()
+    } else
         start_game()
 }
 function addEventForCardsUnlock(){
@@ -217,5 +220,49 @@ function next_card(){
         }
     }
 }
-start_game()
-addEventForCardsUnlock()
+
+function alert(message, onclick = ()=>{}){
+    let dialogs = document.querySelector('.dialogs')
+    if (dialogs == null){
+        dialogs = document.createElement('div')
+        dialogs.classList.add('dialogs')
+        document.body.appendChild(dialogs)
+    }
+    const dialog = document.createElement('dialog')
+    const control_box = document.createElement('div')
+    control_box.classList.add('control-box')
+    const funClose = ()=>{
+        setTimeout(()=> {
+            const parent = btn_close.parentElement.parentElement
+            parent.close()
+            dialogs.remove()
+            onclick()
+        }, 50)
+    }
+    const btn_close = document.createElement('button')
+    btn_close.classList.add('btn-close')
+    btn_close.innerHTML = ''
+    btn_close.onclick = funClose
+    const title = document.createElement('span')
+    title.classList.add('title')
+    title.textContent = 'Alert'
+    const content_box = document.createElement('p')
+    content_box.classList.add('content-box')
+    content_box.innerHTML = `<p><img src="assets/msg_warning-0.png" alt=""><span>${message}</span></p>`
+    const btns = document.createElement('div')
+    btns.classList.add('buttons')
+    const btn_ok = document.createElement('button')
+    btn_ok.textContent = 'OK'
+    btn_ok.onclick = btn_close.onclick
+    dialog.appendChild(control_box)
+    control_box.appendChild(btn_close)
+    control_box.appendChild(title)
+    dialog.appendChild(content_box)
+    content_box.appendChild(btns)
+    btns.appendChild(btn_ok)
+    dialogs.appendChild(dialog)
+    dialog.show()
+}
+alert('سازنده : آقای علیرضا چراغعلئی', () => start_game())
+//start_game()
+//addEventForCardsUnlock()

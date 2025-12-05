@@ -1,0 +1,79 @@
+:root {
+    --dialog-bg-control-box-color: rgb(3, 3, 117);
+    --dialog-button-control-size: 18px;
+}
+.dialogs {
+    position: fixed;
+    left: 0; top: 0;
+    width: 100%; height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: transparent;
+    z-index: 10000;
+}
+.dialogs dialog {
+    min-width: 200px;
+    max-width: 600px;
+    border: 0;
+    margin: auto;
+    overflow: hidden;
+    --border-rb: black 2.2px solid;
+    border-right: var(--border-rb);
+    border-bottom: var(--border-rb);
+    background: var(--secondery-color);
+}
+dialog .control-box {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+    background: var(--dialog-bg-control-box-color);
+    height: calc(var(--dialog-button-control-size) + 6px);
+    padding: 0 3px;
+    border: 3px var(--secondery-color) solid;
+}
+dialog .control-box button {
+    border: 2px outset white;
+    background: var(--secondery-color);
+    min-width: var(--dialog-button-control-size);
+    height: var(--dialog-button-control-size);
+    color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: calc(var(--dialog-button-control-size) - 5px);
+}
+dialog .control-box button.btn-close::before {
+    content: '🗙';
+    position: relative;
+    top: -1px; 
+    left: 0.45px;
+}
+dialog .control-box button:active {
+    border-style: inset;
+}
+dialog .control-box .title {
+    font-weight: 500;
+    font-size: calc(var(--dialog-button-control-size) - 2px);
+}
+dialog .content-box {
+    padding: 15px;
+    padding-top: 12px;
+}
+dialog .content-box p {
+    padding-bottom: 20px;
+    display: flex;
+    align-items: flex-start;
+    gap: 18px;
+}
+dialog .content-box span {
+    max-width: 240px;
+    font-size: 14px;
+}
+dialog .content-box .buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

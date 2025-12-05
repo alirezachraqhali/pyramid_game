@@ -1,9 +1,12 @@
+@import url('../assets/fonts/segoeui.css');
+@import url('xp-base-ui.css');
+@import url('xp-dialog-ui.css');
 * {
     user-select: none;
     -moz-user-select: none;
     /* transition: 150ms ease-in-out; */
-    margin: 0;
-    padding: 0;
+    margin: 0; padding: 0; outline: 0;
+    font-family: 'segoe-ui';
 }
 html {
     min-width: 100vw;
@@ -43,10 +46,8 @@ body {
     padding: 5px;
     text-decoration: none;
     color: black;
-    cursor: default;
 }
 #main-menu ul {
-    padding: 5px 0;
     display: flex;
     flex-direction: column;
     gap: 5px;
@@ -59,16 +60,20 @@ body {
     opacity: 0;
     transition: 100ms;
 }
-#main-menu ul li {
-    padding: 3px 12px;
+#main-menu ul li:not(hr) {
+    min-width: 50px;
+    padding: 3px 8px;
     transition: 120ms ease-in-out;
+}
+#main-menu ul li:has(hr) {
+    padding: 0;
 }
 #main-menu li a:focus {
     background: silver;
 }
-#main-menu ul li a:focus {
+/* #main-menu ul li a:focus {
     background: transparent;
-}
+} */
 #main-menu a:focus ~ ul {
     opacity: 1;
     visibility: visible;

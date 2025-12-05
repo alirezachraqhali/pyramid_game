@@ -1,0 +1,29 @@
+:root {
+    --secondery-color: #c0c0c0;
+    --cursor-arrow: url('../assets/cur/arrow.cur') , default;
+    --cursor-wait: url('../assets/cur/Cursor_3.cur') , wait;
+    --cursor-pointer: url('../assets/cur/Cursor_15.cur') , pointer;
+    --cursor-text: url('../assets/cur/Text.cur') , text;
+    --cursor-text2: text;
+}
+* {
+    cursor: var(--cursor-arrow);
+}
+.buttons button {
+    min-width: 50px;
+    padding: 2px 0;
+    border: 1.8px black solid;
+    border-right-width: 3.2px;
+    border-bottom-width: 3.2px;
+    background: var(--secondery-color);
+}
+.buttons button:active {
+    border-top-width: 3.2px;
+    border-left-width: 3.2px;
+    border-bottom-width: 1.8px;
+    border-right-width: 1.8px;
+}
+.buttons button:focus {
+    outline: 2px dotted black;
+    outline-offset: -7px;
+}
