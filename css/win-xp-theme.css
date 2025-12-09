@@ -41,6 +41,8 @@ body {
     list-style: none;
     height: var(--main-menu-height);
     padding: 1px 5px;
+    overflow: hidden;
+    font-size: 0.9em;
 }
 #main-menu a {
     padding: 5px;
@@ -50,15 +52,16 @@ body {
 #main-menu ul {
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 3px;
     list-style: none;
     position: absolute;
     background: white;
     margin-top: 3.5px;
-    margin-left: 5px;
+    margin-left: 3px;
     visibility: hidden;
     opacity: 0;
     transition: 100ms;
+
 }
 #main-menu ul li:not(hr) {
     min-width: 50px;
@@ -87,10 +90,10 @@ body {
     margin: 3px 5px;
     display: inline-block;
 }
-.card.pick::after {content: '♠️';}
-.card.khesht::after {content: '♦️';}
-.card.del::after {content: '♥️';}
-.card.khaj::after {content: '♣️';}
+.card[suit="0"]::after {content: '♠️';}
+.card[suit="1"]::after {content: '♦️';}
+.card[suit="2"]::after {content: '♥️';}
+.card[suit="3"]::after {content: '♣️';}
 .card::after {
     width: var(--card-width);
     height: calc(var(--card-height) / 2);
@@ -106,8 +109,8 @@ body {
     font-size: 1.5em;
     margin: 5px;
 }
-.card.pick , .card.khaj { color: black; }
-.card.khesht::before , .card.del::before { color: red; }
+.card[suit="0"] , .card[suit="3"] { color: black; }
+.card[suit="1"]::before , .card[suit="2"]::before { color: red; }
 /* .card.cover {
     background-image: url('../assets/cover.jpg');
     background-size: cover;

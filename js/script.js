@@ -8,10 +8,9 @@ let limit_next_card = 0
 let enable_next_card = false
 let cards_length = 0
 function reloadGame(){
-    if (game_cell.querySelectorAll('.row').length > 0){
-        if (confirm('آیا میخواهید از اول بازی کنید ؟'))
-            start_game()
-    } else
+    if (game_cell.querySelectorAll('.row').length > 0)
+        confirm('آیا میخواهید از اول بازی کنید ؟', start_game)
+    else
         start_game()
 }
 function addEventForCardsUnlock(){
@@ -45,8 +44,8 @@ function cardValidate(card) {
                 reactStatusGame()
             }, 1000)
         } else if(validate == false) {
-            alert('جمع آن 13 نیست !')
-            deselectCards()
+            alert('جمع عدد کارت های انتخاب شده 13 نیست.', true, deselectCards)
+            //deselectCards()
         }
     }
 }
@@ -58,7 +57,8 @@ function isValid(card_primary, card_secondery){
         if (n1 != n2){
             let validate = false
             valids.forEach(v=> {
-                if ((v[0] == n1 && v[1] == n2) || (v[0] == n2 && v[1] == n1))
+                if ((v[0] == n1 && v[1] == n2) ||
+                    (v[0] == n2 && v[1] == n1))
                     validate = true
             })
             return validate
@@ -82,8 +82,7 @@ function removeCardIfCardsParent(card){
 }
 function reactStatusGame(){
     if (game_cell.querySelectorAll('.row .card:not(.lock):not(.hide)').length == 0){
-        alert('شما برنده شدید !')
-        reloadGame()
+        alert('شما برنده شدید !', false, ()=> reloadGame())
     } else {
         const _card = document.querySelectorAll('.card:not(.lock):not(.hide):not([number="K"])')
         let _continue = false
@@ -97,8 +96,7 @@ function reactStatusGame(){
             })
         })
         if (_continue == false){
-            alert('بازی به بن بست خورد !')
-            reloadGame()
+            alert('بازی به بن بست خورد !', false, ()=>reloadGame())
         }
     }
 }
@@ -141,8 +139,8 @@ function unlockMoreCards(){
 }
 function start_game() {
     // تعریف خال‌ها و مقادیر کارت‌ها
-    const suits = ['pick', 'del', 'khesht', 'khaj'];
-    const values = ['A', '2', '3', '4', '5', '6', '7', '8', '9','10', 'J', 'Q', 'K'];
+    const suits =  ['0','1','2','3'] //['pick', 'del', 'khesht', 'khaj'];
+    const values = ['A', '2', '3', '4', '5', '6', '7', '8', '9','10', 'J', 'Q', 'K']
     // ساختن کل کارت‌ها
     let deck = [];
     for (let suit of suits)
@@ -152,9 +150,9 @@ function start_game() {
     function shuffle(array) {
         for (let i = array.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
+            [array[i], array[j]] = [array[j], array[i]]
         }
-        return array;
+        return array
     }
     // شافل کردن کارت‌ها
     let shuffledDeck = shuffle(deck)
@@ -178,17 +176,17 @@ function start_game() {
         if (card == cards.lastChild)
             card.ondblclick = next_card
     })
-
     document.getElementById('btn-next-card').onclick = ()=> next_card()
     unlockMoreCards()
 }
 function appendCard(shuffle, parent, lock=false){
     if (shuffle){
         const sh = shuffle.split(' ')
-        const num = sh[0]; const name = sh[1]
+        const num = sh[0]; const suit = sh[1]
         const card = document.createElement('div')
-        card.className = `card ${name}${lock? 'lock': ''}`
+        card.className = `card ${lock? 'lock': ''}`
         card.setAttribute('number', num)
+        card.setAttribute('suit', suit)
         parent.appendChild(card)
     }
 }
@@ -220,13 +218,43 @@ function next_card(){
         }
     }
 }
+class ButtonDialog {
+    constructor(title, enabled = true, style = null, onclick = ()=>{}){
+        this.title = title ?? ''
+        this.enabled = enabled
+        this.style = style
+        this.onclick = onclick
+    }
 
-function alert(message, onclick = ()=>{}){
+    toHtmlElement(onClosingdialog){
+        const btn = document.createElement('button')
+        btn.textContent = this.title
+        if (this.enabled === false)
+            btn.disabled = false
+        if (this.style != null)
+            btn.style = style
+        btn.onclick = ()=>{
+            onClosingdialog()
+            this.onclick()
+        }
+        return btn
+    }
+}
+function createDialog(title, html, onClose = ()=>{}, buttons = []){
     let dialogs = document.querySelector('.dialogs')
     if (dialogs == null){
         dialogs = document.createElement('div')
         dialogs.classList.add('dialogs')
         document.body.appendChild(dialogs)
+    }
+    dialogs.onclick = ()=>{
+        const d = dialogs.querySelectorAll('dialog .control-box')
+        const last_dialog = d[d.length - 1]
+        if (last_dialog){
+            const class_name = 'pulse'
+            last_dialog.classList.add(class_name)
+            setTimeout(()=> last_dialog.classList.remove(class_name), parseFloat())
+        }
     }
     const dialog = document.createElement('dialog')
     const control_box = document.createElement('div')
@@ -235,34 +263,52 @@ function alert(message, onclick = ()=>{}){
         setTimeout(()=> {
             const parent = btn_close.parentElement.parentElement
             parent.close()
-            dialogs.remove()
-            onclick()
+            //dialogs.innerHTML = ''
+            dialogs.removeChild(parent)
+            if (dialogs.children.length == 0)
+                dialogs.remove()
+            onClose()
         }, 50)
     }
     const btn_close = document.createElement('button')
     btn_close.classList.add('btn-close')
     btn_close.innerHTML = ''
     btn_close.onclick = funClose
-    const title = document.createElement('span')
-    title.classList.add('title')
-    title.textContent = 'Alert'
+    const _title = document.createElement('span')
+    _title.classList.add('title')
+    _title.textContent = title
     const content_box = document.createElement('p')
     content_box.classList.add('content-box')
-    content_box.innerHTML = `<p><img src="assets/msg_warning-0.png" alt=""><span>${message}</span></p>`
+    content_box.innerHTML = html
     const btns = document.createElement('div')
     btns.classList.add('buttons')
-    const btn_ok = document.createElement('button')
-    btn_ok.textContent = 'OK'
-    btn_ok.onclick = btn_close.onclick
+    buttons.forEach(btn=> {
+        btns.appendChild(btn.toHtmlElement(funClose))
+    })
     dialog.appendChild(control_box)
     control_box.appendChild(btn_close)
-    control_box.appendChild(title)
+    control_box.appendChild(_title)
     dialog.appendChild(content_box)
     content_box.appendChild(btns)
-    btns.appendChild(btn_ok)
     dialogs.appendChild(dialog)
     dialog.show()
 }
-alert('سازنده : آقای علیرضا چراغعلئی', () => start_game())
+function alert(message, alert_mode, onClosed = ()=>{}){
+    createDialog('Alert', `<p><img src="assets/msg_${(alert_mode)?'warning':'information'}-0.png" alt=""><span>${message}</span></p>`, onClosed, [new ButtonDialog('OK !')])
+}
+function confirm(questation, onYes = ()=>{}, onNo = ()=>{}){
+    const btns = []
+    let isYes = false
+    btns.push(new ButtonDialog('Yes', true, null, ()=>{isYes = true; onYes()}))
+    btns.push(new ButtonDialog('No', true, null, ()=>{isYes = false; onNo()}))
+    createDialog('Questation', `<p><img src="assets/msg_question-0.png" alt=""><span>${questation}</span></p>`, (isYes === true) ? onYes : onNo, btns)
+}
+function open_setting(){
+    html = `تنظیمات به زودی در این بازی اضافه خواهد شد`
+    createDialog('Game Setting', html)
+}
+//open_setting()
+alert('سازنده : آقای علیرضا چراغعلئی', false, start_game)
+//confirm('میخوای بازی کنی یا نه ؟', start_game)
 //start_game()
 //addEventForCardsUnlock()

@@ -1,6 +1,7 @@
 :root {
     --dialog-bg-control-box-color: rgb(3, 3, 117);
     --dialog-button-control-size: 18px;
+    --dialog-animation-duration: 0.5s;
 }
 .dialogs {
     position: fixed;
@@ -33,6 +34,9 @@ dialog .control-box {
     height: calc(var(--dialog-button-control-size) + 6px);
     padding: 0 3px;
     border: 3px var(--secondery-color) solid;
+}
+dialog .control-box.pulse {
+    animation: pulsing var(--dialog-animation-duration) infinite;
 }
 dialog .control-box button {
     border: 2px outset white;
@@ -76,4 +80,11 @@ dialog .content-box .buttons {
     display: flex;
     justify-content: center;
     align-items: center;
+    gap: 5px;
+}
+
+@keyframes pulsing {
+    50% {
+        background: black;
+    }
 }
