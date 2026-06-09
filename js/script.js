@@ -158,6 +158,7 @@ function start_game() {
     let shuffledDeck = shuffle(deck)
     let j = 0, k = 0
     game_cell.innerHTML = ''
+    card_next.innerHTML = ''
     for (i=1;i<=7;i++){
         const row = document.createElement('div')
         row.className = 'row'
